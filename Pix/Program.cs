@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 
 namespace Pix
@@ -8,51 +9,63 @@ namespace Pix
     {
         static void Main(string[] args)
         {
-            if (args.Length != 3)
-            {
-                Console.WriteLine($"Usage:" +
-                    $"{Environment.NewLine}  arg1 - file name (with extension)" +
-                    $"{Environment.NewLine}  arg2 - palette number (0-6)" +
-                    $"{Environment.NewLine}  arg3 - pixel block size (1-..)");
-                return;
-            }
+            var path = Directory.GetCurrentDirectory();
+            var src = Path.Combine(path, "original");
+            var files = Directory.GetFiles(src, "*.png");
 
-            var palettes = new Palettes().GetPalettes();
-            var paletteIndex = Math.Max(Math.Min(int.Parse(args[1]), palettes.Length - 1), 0);
-            var selectedPalette = palettes[paletteIndex];
-            selectedPalette = selectedPalette.OrderBy(x => CalculateLuminance(x)).ToArray();
-            var divisor = 256 / selectedPalette.Length;
-            var bitmap = new Bitmap(Image.FromFile(args[0]));
-            var limit = Math.Min(bitmap.Width, bitmap.Height);
-            var pixelSize = int.Parse(args[2]);
-            for (var i = 0; i < limit; i += pixelSize)
+            foreach(var file in files)
             {
-                for (var j = 0; j < limit; j += pixelSize)
+                var filename = Path.GetFileNameWithoutExtension(file);
+                var outputDir = Path.Combine(path, "out", filename);
+                if (!Directory.Exists(outputDir))
                 {
-                    var acc = 0d;
-                    for (var k = 0; k < pixelSize; k++)
+                    Directory.CreateDirectory(outputDir);
+                }
+                for(int p=0;p<7;p++)
+                {
+                    for(int s=1;s<5;s++)
                     {
-                        for (var l = 0; l < pixelSize; l++)
+                        var palettes = new Palettes().GetPalettes();
+                        var paletteIndex = Math.Max(Math.Min(p, palettes.Length - 1), 0);
+                        var selectedPalette = palettes[paletteIndex];
+                        selectedPalette = selectedPalette.OrderBy(x => CalculateLuminance(x)).ToArray();
+                        var divisor = 256 / selectedPalette.Length;
+                        using var bitmap = new Bitmap(Image.FromFile(file));
+                        var limit = Math.Min(bitmap.Width, bitmap.Height);
+                        var pixelSize = s;
+                        for (var i = 0; i < limit; i += pixelSize)
                         {
-                            var color = bitmap.GetPixel(i + k, j + l);
-                            acc += CalculateLuminance(color);
-                        }
-                    }
+                            for (var j = 0; j < limit; j += pixelSize)
+                            {
+                                var acc = 0d;
+                                for (var k = 0; k < pixelSize; k++)
+                                {
+                                    for (var l = 0; l < pixelSize; l++)
+                                    {
+                                        var color = bitmap.GetPixel(i + k, j + l);
+                                        acc += CalculateLuminance(color);
+                                    }
+                                }
 
-                    var meanLuminance = acc / (pixelSize * pixelSize);
-                    var newColor = selectedPalette[Math.Min((int)(meanLuminance / divisor), selectedPalette.Length - 1)];
+                                var meanLuminance = acc / (pixelSize * pixelSize);
+                                var newColor = selectedPalette[Math.Min((int)(meanLuminance / divisor), selectedPalette.Length - 1)];
 
-                    for (var k = 0; k < pixelSize; k++)
-                    {
-                        for (var l = 0; l < pixelSize; l++)
-                        {
-                            bitmap.SetPixel(i + k, j + l, newColor);
+                                for (var k = 0; k < pixelSize; k++)
+                                {
+                                    for (var l = 0; l < pixelSize; l++)
+                                    {
+                                        bitmap.SetPixel(i + k, j + l, newColor);
+                                    }
+                                }
+                            }
                         }
+                        bitmap.Save(Path.Combine(outputDir, $"out_{p}_{s}_{filename}.png"));
+                        Console.WriteLine($"Done! Saved as out_{p}_{s}_{filename}.png");
                     }
                 }
             }
-            bitmap.Save($"out_{args[0]}");
-            Console.WriteLine($"Done! Saved as out_{args[0]}");
+
+            
         }
         private static double CalculateLuminance(Color c)
         {
