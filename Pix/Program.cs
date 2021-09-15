@@ -12,7 +12,7 @@ namespace Pix
             {
                 Console.WriteLine($"Usage:" +
                     $"{Environment.NewLine}  arg1 - file name (with extension)" +
-                    $"{Environment.NewLine}  arg2 - palette number (0-2)" +
+                    $"{Environment.NewLine}  arg2 - palette number (0-6)" +
                     $"{Environment.NewLine}  arg3 - pixel block size (1-..)");
                 return;
             }
@@ -40,7 +40,7 @@ namespace Pix
                     }
 
                     var meanLuminance = acc / (pixelSize * pixelSize);
-                    var newColor = selectedPalette[(int)(meanLuminance / divisor)];
+                    var newColor = selectedPalette[Math.Min((int)(meanLuminance / divisor), selectedPalette.Length - 1)];
 
                     for (var k = 0; k < pixelSize; k++)
                     {
