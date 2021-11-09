@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Design.DataContext="{Binding Path=MainWindow.ColorTool, Source={StaticResource Locator}}"
+             x:Class="Pix.UI.Views.ColorToolView">
+
+    <SplitView DisplayMode="CompactInline" IsPaneOpen="{Binding DisplayTool}" 
+               OpenPaneLength="300" CompactPaneLength="0" PanePlacement="Right">
+        <SplitView.Pane>
+            <Grid RowDefinitions="auto,auto,auto">
+                <Grid.Styles>
+                    <Style Selector="Slider">
+                        <Setter Property="Margin" Value="10 5" />
+                        <Setter Property="Minimum" Value="{Binding MinColorVal}"/>
+                        <Setter Property="Maximum" Value="{Binding MaxColorVal}"/>
+                    </Style>
+                    <Style Selector="NumericUpDown">
+                        <Setter Property="Minimum" Value="{Binding MinColorVal}"/>
+                        <Setter Property="Maximum" Value="{Binding MaxColorVal}"/>
+                    </Style>
+                </Grid.Styles>
+                <Grid ColumnDefinitions="auto, *, auto">
+                    <TextBlock Text="R"/>
+                    <Slider Grid.Column="1" Value="{Binding SelectedColor.R}"/>
+                    <NumericUpDown Grid.Column="2" Value="{Binding SelectedColor.R}"/>
+                </Grid>
+                <Grid Grid.Row="1" ColumnDefinitions="auto, *, auto">
+                    <TextBlock Text="G"/>
+                    <Slider Grid.Column="1" Value="{Binding SelectedColor.G}"/>
+                    <NumericUpDown Grid.Column="2" Value="{Binding SelectedColor.G}"/>
+                </Grid>
+                <Grid Grid.Row="2" ColumnDefinitions="auto, *, auto">
+                    <TextBlock Text="B"/>
+                    <Slider Grid.Column="1" Value="{Binding SelectedColor.B}"/>
+                    <NumericUpDown Grid.Column="2" Value="{Binding SelectedColor.B}"/>
+                </Grid>
+            </Grid>
+        </SplitView.Pane>
+        <Grid RowDefinitions="auto,*,auto">
+            <TextBlock Text="Colors"/>
+            <ListBox Grid.Row="1" Items="{Binding Colors}" SelectedItem="{Binding SelectedColor}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Visible" Padding="0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle Fill="{Binding Converter={StaticResource BrushConverter}}" Width="60" Height="60"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ListBox>
+            <Grid Grid.Row="2" ColumnDefinitions="auto, *, auto">
+                <TextBlock Text="Block size"/>
+                <Slider Margin="10 0" Grid.Column="1" Value="{Binding BlockSize}" Minimum="{Binding MinBlockSize}" Maximum="{Binding MaxBlockSize}"/>
+                <NumericUpDown Grid.Column="2" Value="{Binding BlockSize}" Minimum="{Binding MinBlockSize}" Maximum="{Binding MaxBlockSize}"/>
+            </Grid>
+        </Grid>
+    </SplitView>
+</UserControl>

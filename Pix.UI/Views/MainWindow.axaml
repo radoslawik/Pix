@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Pix.Core.ViewModels"
+        xmlns:controls="clr-namespace:Pix.UI.Controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        Width="1000" Height="600"
+        MinWidth="850" MinHeight="400"
+        x:Class="Pix.UI.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Design.DataContext="{Binding Path=MainWindow, Source={StaticResource Locator}}"
+        Title="Pix.UI">
+
+    <Grid RowDefinitions="auto,*">
+        <SplitView DisplayMode="CompactInline" IsPaneOpen="{Binding IsMenuOpen}" OpenPaneLength="220" CompactPaneLength="32">
+            <SplitView.Pane>
+                <ContentControl Content="{Binding Menu}"/>
+            </SplitView.Pane>
+            <ContentControl Content="{Binding ColorTool}"/>
+        </SplitView>
+        <Grid Margin="24 0" Grid.Row="1" ColumnDefinitions="auto,50,auto" HorizontalAlignment="Center">
+            <Grid Width="200">
+                <Image Source="{Binding Menu.FilePath, Converter={StaticResource ImageConverter}}" Stretch="Uniform"/>
+                <Rectangle Fill="Gray" IsVisible="{Binding Menu.FilePath, Converter={x:Static ObjectConverters.IsNull}}" Height="200"/>
+            </Grid>
+            <Grid Grid.Column="2" Width="200">
+                <controls:LiveImage Data="{Binding PixelData}" OriginalWidth="{Binding BitmapWidth}" OriginalHeight="{Binding BitmapHeight}"/>
+                <Rectangle Fill="Gray" IsVisible="{Binding PixelData, Converter={x:Static ObjectConverters.IsNull}}" Height="200"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

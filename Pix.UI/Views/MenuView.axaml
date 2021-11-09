@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Design.DataContext="{Binding Path=MainWindow.Menu, Source={StaticResource Locator}}"
+             x:Class="Pix.UI.Views.MenuView">
+    <UserControl.Styles>
+        <Style Selector="PathIcon">
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Opacity" Value="0.5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Styles>
+    
+    <Grid ColumnDefinitions="32, auto" RowDefinitions="auto,auto,auto,auto">
+        <TextBlock Grid.Column="1" Text="Pix" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold"/>
+        <PathIcon Grid.Row="1" Data="{Binding ImageIcon, Converter={StaticResource IconConverter}}" Margin="0 8 0 0"/>
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="2">
+            <TextBlock FontSize="8" Text="File"/>
+            <Grid ColumnDefinitions="*,4,auto">
+                <TextBox IsReadOnly="True" Text="{Binding FileName}" HorizontalAlignment="Stretch"/>
+                <Button Grid.Column="2" Command="{Binding OpenFileCommand}">
+                    <PathIcon Data="{Binding OpenIcon, Converter={StaticResource IconConverter}}"/>
+                </Button>
+            </Grid>
+        </StackPanel>
+        <PathIcon Grid.Row="2" Data="{Binding PaletteIcon, Converter={StaticResource IconConverter}}" Margin="0 8 0 0"/>
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2" Margin="2">
+            <TextBlock FontSize="8" Text="Palette"/>
+            <ComboBox Items="{Binding AvailablePalettes}" SelectedItem="{Binding SelectedPalette, Mode=TwoWay}" HorizontalAlignment="Stretch"/>
+        </StackPanel>
+        <PathIcon Grid.Row="3" Data="{Binding SettingsIcon, Converter={StaticResource IconConverter}}" Margin="0 8 0 0"/>
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="3" Margin="2">
+            <TextBlock FontSize="8" Text="Options"/>
+            <CheckBox IsChecked="{Binding ForceAllColors}" Content="Ensure all colors"/>
+            <CheckBox IsChecked="{Binding OrderByLuminance}" Content="Order by luminance"/>
+        </StackPanel>
+        <Button VerticalAlignment="Stretch" Grid.RowSpan="4" Command="{Binding ToggleMenuCommand}">
+            <PathIcon VerticalAlignment="Top" Data="{Binding MenuIcon, Converter={StaticResource IconConverter}}" Opacity="1"/>
+        </Button>
+    </Grid>
+</UserControl>

@@ -1,0 +1,20 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:Pix.UI"
+             xmlns:conv="using:Pix.UI.Converters"
+             x:Class="Pix.UI.App">
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme Mode="Light"/>
+    </Application.Styles>
+
+    <Application.Resources>
+        <local:ViewModelLocator x:Key="Locator"/>
+        <conv:ImageConverter x:Key="ImageConverter"/>
+        <conv:IconConverter x:Key="IconConverter"/>
+        <conv:BrushConverter x:Key="BrushConverter"/>
+    </Application.Resources>
+</Application>
