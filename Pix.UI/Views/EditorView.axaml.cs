@@ -3,9 +3,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Pix.UI.Views
 {
-    public partial class ColorToolView : UserControl
+    public partial class EditorView : UserControl
     {
-        public ColorToolView()
+        public EditorView()
         {
             InitializeComponent();
         }

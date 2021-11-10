@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace Pix.Core.ViewModels
 {
-    public class ColorToolViewModel : ViewModelBase
+    public class EditorViewModel : ViewModelBase
     {
         public ICommand AddColorCommand { get; }
         [Reactive]
@@ -28,8 +28,8 @@ namespace Pix.Core.ViewModels
         public static int MinColorVal => 0;
 
         private readonly MainWindowViewModel _parent;
-        public delegate ColorToolViewModel Factory(MainWindowViewModel parent);
-        public ColorToolViewModel(MainWindowViewModel parent)
+        public delegate EditorViewModel Factory(MainWindowViewModel parent);
+        public EditorViewModel(MainWindowViewModel parent)
         {
             _parent = parent;
             AddColorCommand = ReactiveCommand.Create(AddColor);

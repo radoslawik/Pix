@@ -17,7 +17,7 @@
             <SplitView.Pane>
                 <ContentControl Content="{Binding Menu}"/>
             </SplitView.Pane>
-            <ContentControl Content="{Binding ColorTool}"/>
+            <ContentControl Content="{Binding Editor}"/>
         </SplitView>
         <Grid Margin="24 0" Grid.Row="1" ColumnDefinitions="auto,50,auto" HorizontalAlignment="Center">
             <Grid Width="200">

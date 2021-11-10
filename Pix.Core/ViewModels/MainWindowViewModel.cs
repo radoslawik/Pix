@@ -13,7 +13,7 @@ namespace Pix.Core.ViewModels
     {
         private readonly IPixelService _pixelService;
         public ICommand PixelizeCommand { get; }
-        public ColorToolViewModel ColorTool { get; }
+        public EditorViewModel Editor { get; }
         public MenuViewModel Menu { get; }
         public SettingsViewModel Settings { get; }
 
@@ -26,16 +26,16 @@ namespace Pix.Core.ViewModels
         [Reactive]
         public int? BitmapHeight { get; set; }
 
-        public MainWindowViewModel(IPixelService pixelService, ColorToolViewModel.Factory colorToolFactory,
+        public MainWindowViewModel(IPixelService pixelService, EditorViewModel.Factory colorToolFactory,
             MenuViewModel.Factory menuFactory, SettingsViewModel.Factory settingsFactory)
         {
             _pixelService = pixelService;
             Settings = settingsFactory();
-            ColorTool = colorToolFactory(this);
+            Editor = colorToolFactory(this);
             Menu = menuFactory(this);
             PixelizeCommand = ReactiveCommand.CreateFromTask(Pixelize);
             this.WhenAnyValue(x => x.Menu.SelectedPalette).Subscribe(PaletteChanged);
-            this.WhenAnyValue(x => x.ColorTool.Colors, x => x.ColorTool.BlockSize, x => x.Menu.ForceAllColors, x => x.Menu.OrderByLuminance).Subscribe(async x => await Pixelize());
+            this.WhenAnyValue(x => x.Editor.Colors, x => x.Editor.BlockSize, x => x.Menu.ForceAllColors, x => x.Menu.OrderByLuminance).Subscribe(async x => await Pixelize());
         }
 
         public async void Initialize(string path)
@@ -54,14 +54,14 @@ namespace Pix.Core.ViewModels
 
         private void PaletteChanged(Palette newPalette)
         {
-            ColorTool.UpdateColors(newPalette);
+            Editor.UpdateColors(newPalette);
         }
 
         public async Task Pixelize()
         {
             if (BitmapHeight is not null && BitmapWidth is not null)
             {
-                PixelData = await _pixelService.GetPixelizedStream(ColorTool.BlockSize, Menu.ForceAllColors, Menu.OrderByLuminance, ColorTool.Colors.ToArray());
+                PixelData = await _pixelService.GetPixelizedStream(Editor.BlockSize, Menu.ForceAllColors, Menu.OrderByLuminance, Editor.Colors.ToArray());
             }
         }
     }
