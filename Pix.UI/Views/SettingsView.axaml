@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Pix.UI.Views.SettingsView">
-    <Grid>
-        <ComboBox Items="{Binding Themes}" SelectedItem="{Binding CurrentTheme}"/>
+    <Grid ColumnDefinitions="auto,auto">
+        <Button Content="Save" Command="{Binding SaveCommand}"/>
+        <ComboBox Grid.Column="1" Items="{Binding Themes}" SelectedItem="{Binding CurrentTheme}"/>
     </Grid>
 </UserControl>

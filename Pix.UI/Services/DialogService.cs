@@ -33,5 +33,26 @@ namespace Pix.UI.Services
             }
             return path;
         }
+
+        public async Task<string> ShowSaveFileDialog(string title, string directory, string name)
+        {
+            var path = string.Empty;
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop
+                && desktop.MainWindow is not null)
+            {
+                var filter = new FileDialogFilter() { Name = "Images", Extensions = new List<string> { "png", "jpg", "bmp" } };
+                var dialog = new SaveFileDialog
+                {
+                    Title = title,
+                    Directory = directory,
+                    InitialFileName = name,
+                    Filters = new List<FileDialogFilter> { filter },
+                };
+
+                var result = await dialog.ShowAsync(desktop.MainWindow);
+                path = result ?? path;
+            }
+            return path;
+        }
     }
 }

@@ -1,9 +1,12 @@
-﻿using Pix.Core.Models;
+﻿using Avalonia;
+using Avalonia.Platform;
+using Pix.Core.Models;
 using Pix.Core.Services.Interfaces;
 using Pix.UI.Helpers;
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Pix.UI.Services
@@ -95,7 +98,21 @@ namespace Pix.UI.Services
                 _sync = false;
                 return data;
             });
+        }
 
+        public void SaveBitmap(string file)
+        {
+            if(_currentData is not null && _bitmap is not null)
+            {
+                var bitmap = new Avalonia.Media.Imaging.WriteableBitmap(
+                    new PixelSize(_bitmap.Width, _bitmap.Height),
+                    new Vector(_bitmap.Width, _bitmap.Height),
+                    Avalonia.Platform.PixelFormat.Bgra8888,
+                    AlphaFormat.Unpremul);
+                using var buffer = bitmap.Lock();
+                Marshal.Copy(_currentData, 0, buffer.Address, _currentData.Length);
+                bitmap.Save(file);
+            }
         }
 
         public (int, int) Initialize(string file)
