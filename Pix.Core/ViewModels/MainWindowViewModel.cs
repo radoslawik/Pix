@@ -15,6 +15,7 @@ namespace Pix.Core.ViewModels
         public ICommand PixelizeCommand { get; }
         public ColorToolViewModel ColorTool { get; }
         public MenuViewModel Menu { get; }
+        public SettingsViewModel Settings { get; }
 
         [Reactive]
         public bool IsMenuOpen { get; set; }
@@ -26,12 +27,13 @@ namespace Pix.Core.ViewModels
         public int? BitmapHeight { get; set; }
 
         public MainWindowViewModel(IPixelService pixelService, ColorToolViewModel.Factory colorToolFactory,
-            MenuViewModel.Factory menuFactory)
+            MenuViewModel.Factory menuFactory, SettingsViewModel.Factory settingsFactory)
         {
             _pixelService = pixelService;
-            PixelizeCommand = ReactiveCommand.CreateFromTask(Pixelize);
+            Settings = settingsFactory();
             ColorTool = colorToolFactory(this);
             Menu = menuFactory(this);
+            PixelizeCommand = ReactiveCommand.CreateFromTask(Pixelize);
             this.WhenAnyValue(x => x.Menu.SelectedPalette).Subscribe(PaletteChanged);
             this.WhenAnyValue(x => x.ColorTool.Colors, x => x.ColorTool.BlockSize, x => x.Menu.ForceAllColors, x => x.Menu.OrderByLuminance).Subscribe(async x => await Pixelize());
         }

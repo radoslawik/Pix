@@ -16,7 +16,7 @@
     </UserControl.Styles>
     
     <Grid ColumnDefinitions="32, auto" RowDefinitions="auto,auto,auto,auto">
-        <TextBlock Grid.Column="1" Text="Pix" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold"/>
+        <TextBlock Grid.Column="1" Classes="header" Text="Pix" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="DemiBold"/>
         <PathIcon Grid.Row="1" Data="{Binding ImageIcon, Converter={StaticResource IconConverter}}" Margin="0 8 0 0"/>
         <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Vertical" Margin="2">
             <TextBlock FontSize="8" Text="File"/>

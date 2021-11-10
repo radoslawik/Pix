@@ -12,7 +12,7 @@
         Design.DataContext="{Binding Path=MainWindow, Source={StaticResource Locator}}"
         Title="Pix.UI">
 
-    <Grid RowDefinitions="auto,*">
+    <Grid RowDefinitions="auto,*,auto">
         <SplitView DisplayMode="CompactInline" IsPaneOpen="{Binding IsMenuOpen}" OpenPaneLength="220" CompactPaneLength="32">
             <SplitView.Pane>
                 <ContentControl Content="{Binding Menu}"/>
@@ -29,5 +29,6 @@
                 <Rectangle Fill="Gray" IsVisible="{Binding PixelData, Converter={x:Static ObjectConverters.IsNull}}" Height="200"/>
             </Grid>
         </Grid>
+        <ContentControl Grid.Row="2" Content="{Binding Settings}" HorizontalAlignment="Right"/>
     </Grid>
 </Window>
